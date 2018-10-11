@@ -1,0 +1,25 @@
+scalar JSON
+
+type Query {
+  fetchUsers: JSON!
+}
+
+type Mutation {
+    signUp(email: String!, password: String!, firstName: String!, lastName: String!, role: Role): AuthPayload!
+    login(email: String!, password: String!): AuthPayload!
+    changePassword(email: String!, id: ID, newPassword: String!): User
+    forgotPassword(email: String!): JSON!
+    updateUserRole(userId: String!, role: String!): JSON!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+    firstName: String
+    lastName: String
+    email: String
+    password: String
+}
