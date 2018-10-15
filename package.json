@@ -29,6 +29,7 @@
     "bcryptjs": "^2.4.3",
     "btoa-atob": "^0.1.2",
     "chromeless": "^1.5.2",
+    "dotenv": "^6.1.0",
     "gql-merge": "0.0.6",
     "graphql": "^0.13.2",
     "graphql-request": "^1.6.0",

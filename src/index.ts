@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { GraphQLServer } from 'graphql-yoga';
 import { formatError } from 'apollo-errors';
 import resolvers from './resolvers';
+require('dotenv').config()
 
 const start = async () => {
   // Create a mongodb client
