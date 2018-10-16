@@ -6,7 +6,7 @@ require('dotenv').config()
 
 const start = async () => {
   // Create a mongodb client
-  mongoose.connect(process.env.MONGODB_URI);
+  mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
   const db = mongoose.connection;
   db.on('error', console.error.bind(console, 'connection error:'));
   db.once('open', _ => console.log('MongoDB now connected'));

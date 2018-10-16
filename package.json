@@ -18,6 +18,7 @@
     "apollo-errors": "^1.9.0",
     "apollo-upload-server": "^5.0.0",
     "async-retry": "^1.2.1",
+    "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",

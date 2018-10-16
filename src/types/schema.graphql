@@ -2,6 +2,11 @@ scalar JSON
 
 type Query {
   fetchUsers: JSON!
+  getManagement: JSON!
+  getPrice(name: String!): Price!
+  getLog(channel: String!, chaincode: String!, chaincodeVer: String!, args: String!): JSON!
+  getAllLogs(channel: String!, chaincode: String!, chaincodeVer: String!, args: String!): JSON!
+  getLogCount(channel: String!, chaincode: String!, chaincodeVer: String!, args: String!): JSON!
 }
 
 type Mutation {
@@ -10,6 +15,7 @@ type Mutation {
     changePassword(email: String!, id: ID, newPassword: String!): User
     forgotPassword(email: String!): JSON!
     updateUserRole(userId: String!, role: String!): JSON!
+    manage(license: String!, licenseType: String!, quantity: Float!, listFee: Float!, discount: Float, netFee: Float, productSupportFee: Float, softwareUpdateFee: Float, otherFees: Float, cdPackFee: Float, unitPrice: Float): Management
 }
 
 type AuthPayload {
@@ -18,10 +24,32 @@ type AuthPayload {
 }
 
 type User {
-    firstName: String
-    lastName: String
-    email: String
-    password: String
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+}
+
+type Management {
+  license: String!
+  licenseType: String!
+  quantity: Float!
+  listFee: Float!
+  discount: Float
+  netFee: Float
+  productSupportFee: Float
+  softwareUpdateFee: Float
+  otherFees: Float
+  cdPackFee: Float
+  unitPrice: Float
+}
+
+type Price {
+  name: String!
+  NUP: String
+  NUPSupport: String
+  Processor: String
+  ProcessorSupport: String
 }
 
 enum Role {
