@@ -4,9 +4,9 @@ type Query {
   fetchUsers: JSON!
   getManagement: JSON!
   getPrice(name: String!): Price!
-  getLog(channel: String!, chaincode: String!, chaincodeVer: String!, args: String!): JSON!
-  getAllLogs(channel: String!, chaincode: String!, chaincodeVer: String!, args: String!): JSON!
-  getLogCount(channel: String!, chaincode: String!, chaincodeVer: String!, args: String!): JSON!
+  getLog(channel: String!, chaincode: String!, chaincodeVer: String!, args: [String!]): JSON!
+  getAllLogs(channel: String!, chaincode: String!, chaincodeVer: String!, args: [String!]): JSON!
+  getLogCount(channel: String!, chaincode: String!, chaincodeVer: String!, args: [String!]): JSON!
 }
 
 type Mutation {

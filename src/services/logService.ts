@@ -1,4 +1,7 @@
-const axios = require('axios');
+// const axios = require('axios');
+import axios from 'axios';
+import { errorHandler } from '../errors/errorHandler';
+
 require('dotenv').config();
 
 export class LogService {
@@ -10,49 +13,31 @@ export class LogService {
     args
   }) {
     const data = {
-      channel: {
-        channel
-      },
-      chaincode: {
-        chaincode
-      },
-      chaincodeVer: {
-        chaincodeVer
-      },
+      channel,
+      chaincode,
+      chaincodeVer,
       method: "query",
-      args: {
-        ...args
-      }
+      args
     };
 
-    const JSONdata = JSON.stringify(data);
-
-    axios
-      .post(
-        "https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query",
-        JSONdata, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: process.env.OABCS_CREDS
-          },
-          proxy: {
-            host: "8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com",
-            port: 443,
-            path: "/restproxy1/bcsgw/rest/v1/transaction/query"
-          },
-          data: data
-        }
-      )
-      .then(response => {
-        return response.data;
+    try {
+      const response = await axios.post('https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query',
+      data, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: process.env.OABCS_CREDS
+        },
       })
-      .catch(error => {
-        return error;
-      });
+      return response.data.result.payload; 
+    } catch (error) {
+      throw errorHandler('GetLogsError', {
+        message: 'There was an error getting the  logs',
+        data: error.response.error.data,
+      })
+    }
   }
 
-  // Query a single log by its ID
   static async queryLog({
     channel,
     chaincode,
@@ -60,48 +45,31 @@ export class LogService {
     args
   }) {
     const data = {
-      channel: {
-        channel
-      },
-      chaincode: {
-        chaincode
-      },
-      chaincodeVer: {
-        chaincodeVer
-      },
+      channel,
+      chaincode,
+      chaincodeVer,
       method: "queryLog",
-      args: {
-        ...args
-      }
-    }
-    const JSONdata = JSON.stringify(data);
+      args
+    };
 
-    axios
-      .post(
-        "https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query",
-        JSONdata, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: process.env.OABCS_CREDS
-          },
-          proxy: {
-            host: "8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com",
-            port: 443,
-            path: "/restproxy1/bcsgw/rest/v1/transaction/query"
-          },
-          data: data
-        }
-      )
-      .then(response => {
-        return response.data;
+    try {
+      const response = await axios.post('https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query',
+      data, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: process.env.OABCS_CREDS
+        },
       })
-      .catch(error => {
-        return error;
-      });
+      return response.data.result.payload; 
+    } catch (error) {
+      throw errorHandler('GetLogsError', {
+        message: 'There was an error getting the  logs',
+        data: error.response.error.data,
+      })
+    }
   }
 
-  // Query a all logs associated to a company
   static async queryAllLogs({
     channel,
     chaincode,
@@ -109,44 +77,28 @@ export class LogService {
     args
   }) {
     const data = {
-      channel: {
-        channel
-      },
-      chaincode: {
-        chaincode
-      },
-      chaincodeVer: {
-        chaincodeVer
-      },
+      channel,
+      chaincode,
+      chaincodeVer,
       method: "queryAllLogs",
-      args: {
-        ...args
-      }
-    }
-    const JSONdata = JSON.stringify(data);
+      args
+    };
 
-    axios
-      .post(
-        "https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query",
-        JSONdata, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: process.env.OABCS_CREDS
-          },
-          proxy: {
-            host: "8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com",
-            port: 443,
-            path: "/restproxy1/bcsgw/rest/v1/transaction/query"
-          },
-          data: data
-        }
-      )
-      .then(response => {
-        return response.data;
+    try {
+      const response = await axios.post('https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query',
+      data, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: process.env.OABCS_CREDS
+        },
       })
-      .catch(error => {
-        return error;
-      });
+      return response.data.result.payload; 
+    } catch (error) {
+      throw errorHandler('GetLogsError', {
+        message: 'There was an error getting the  logs',
+        data: error.response.error.data,
+      })
+    }
   }
 }
