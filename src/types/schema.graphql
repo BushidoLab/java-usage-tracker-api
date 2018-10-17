@@ -15,7 +15,7 @@ type Mutation {
     changePassword(email: String!, id: ID, newPassword: String!): User
     forgotPassword(email: String!): JSON!
     updateUserRole(userId: String!, role: String!): JSON!
-    manage(license: String!, licenseType: String!, quantity: Float!, listFee: Float!, discount: Float, netFee: Float, productSupportFee: Float, softwareUpdateFee: Float, otherFees: Float, cdPackFee: Float, unitPrice: Float): Management
+    manage(license: String!, licenseType: String!, quantity: Int!, listFee: Float!, discount: Float, netFee: Float, productSupportFee: Float, softwareUpdateFee: Float, otherFees: Float, cdPackFee: Float, unitPrice: Float): Management
 }
 
 type AuthPayload {
