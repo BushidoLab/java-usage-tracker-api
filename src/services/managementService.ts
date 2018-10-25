@@ -17,7 +17,7 @@ export class ManagementService {
     softwareUpdateFee,
     otherFees,
     cdPackFee,
-    unitPrice
+    unitPrice,
   }) {
     try {
       return management.create({
@@ -31,12 +31,25 @@ export class ManagementService {
         softwareUpdateFee,
         otherFees,
         cdPackFee,
-        unitPrice
+        unitPrice,
       });
     } catch (error) {
       throw errorHandler('CreateManagementError', {
         message: 'There was an error creating a new management form',
         data: error.response.data.error
+      });
+    }
+  }
+
+  static async deleteManagement({
+    id
+  }) {
+    try {
+      return management.findByIdAndDelete(id)
+    } catch (error) {
+      throw errorHandler('DeleteManagementError', {
+      message: 'There was an error deleting this management form',
+      data: error.response.data.error
       });
     }
   }

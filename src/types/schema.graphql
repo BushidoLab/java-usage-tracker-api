@@ -4,9 +4,12 @@ type Query {
   fetchUsers: JSON!
   getManagement: JSON!
   getPrice(name: String!): Price!
-  getLog(channel: String!, chaincode: String!, chaincodeVer: String!, args: [String!]): JSON!
-  getAllLogs(channel: String!, chaincode: String!, chaincodeVer: String!, args: [String!]): JSON!
-  getLogCount(channel: String!, chaincode: String!, chaincodeVer: String!, args: [String!]): JSON!
+  getLog(args: [String!]): JSON!
+  getAllLogs: JSON!
+  getAllProcLogs: JSON!
+  getLogCount: JSON!
+  getProcLogCount: JSON!
+  getReconcile: JSON!
 }
 
 type Mutation {
@@ -16,6 +19,7 @@ type Mutation {
     forgotPassword(email: String!): JSON!
     updateUserRole(userId: String!, role: String!): JSON!
     manage(license: String!, licenseType: String!, quantity: Int!, listFee: Float!, discount: Float, netFee: Float, productSupportFee: Float, softwareUpdateFee: Float, otherFees: Float, cdPackFee: Float, unitPrice: Float): Management
+    deleteManagement(id: String): JSON!
 }
 
 type AuthPayload {
@@ -28,6 +32,16 @@ type User {
   lastName: String
   email: String
   password: String
+}
+
+type Reconcile {
+  productName: String
+  licenseType: String
+  quantity: String
+  inventory: String
+  supported: String
+  difference: String
+  amount: String
 }
 
 type Management {

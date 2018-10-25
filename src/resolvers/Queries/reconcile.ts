@@ -1,11 +1,7 @@
-import { LogService } from '../../services/logService';
-import { ManagementService } from '../../services/managementService';
+import { ReconcileService } from '../../services/reconcileService';
 
 export const getReconcileData = {
-  async getManagement(_) {
-    return ManagementService.getManagement();
-  },
-  async getAllLogs(_, args) {
-    return LogService.queryAllLogs({ ...args });
+  async getReconcile(_) {
+    return ReconcileService.getReconcile();
   }
 }
