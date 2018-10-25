@@ -11,21 +11,32 @@ const chaincodeVer = "1.0";
 
       
 // Function parses through JUT logs stored on blockchain and returns an array of objects
-// Results array declared outside of function so it doesn't reset as the function recurses
 function parseLogs(value, arr) {
-  let results = arr;
-  const str = value	
-  const index = str.indexOf(",{");
+  const results = arr;
+  const index = value.indexOf(",{");
+  const newStr = value.substring(index + 1)
   
-  results.push(JSON.parse(str.substring(0, index)))
-  const newStr = str.substring(index + 1)
+  results.push(JSON.parse(value.substring(0, index)))
   
   if (newStr.indexOf(",{") === -1) {
-    results.push(JSON.parse(str.substring(index + 1)))
+    results.push(JSON.parse(value.substring(index + 1)))
     return results
   }
 
   return parseLogs(newStr, arr);
+}
+
+// Checks if logs are from the same host
+function repeatedLogs(firstLog, secondLog) {
+  for (let hostname in firstLog) {
+    if (firstLog[hostname] === secondLog[hostname]) {
+      if (firstLog.dateTime < secondLog.dateTime) {
+        return secondLog;
+      } else {
+        return firstLog;
+      }
+    }
+  }
 }
 
 export class LogService {
@@ -128,12 +139,36 @@ export class LogService {
           Authorization: process.env.OABCS_CREDS
         },
       })
+      // Massaging received data
       // Receives response and eliminates all instances of \"
       const logs = response.data.result.payload.replace(/\\"/gm, "");
       
-      // const usageLogs = parseLogs(logs);
+      let usageLogs = parseLogs(logs, logArr);
+      usageLogs.forEach(log => {
+        log.IP = log.hostname.substring(log.hostname.indexOf("/") + 1);
+        log.hostname = log.hostname.substring(0, log.hostname.indexOf("/"));
 
-      return parseLogs(logs, logArr);
+        if (log.javaLocation.includes("jdk")) {
+          log.appName = "Java Development Kit";
+        } else if (log.javaLocation.includes("jre")) {
+          log.appName = "Java Runtime Environment";
+        }
+        log.dateTime = log.dateTime;
+        log.product = "Java";
+        log.category = "NUP";
+        log.userCount = 1;
+        log.operatingSystem = log.OS;
+        delete log.OS;
+      });
+
+      for (let i = 0; i < usageLogs.length; i++) {
+        if (i+1 < usageLogs.length) {
+          usageLogs = repeatedLogs(usageLogs[i], usageLogs[i+1]);
+        }
+      }
+
+      return usageLogs;
+
     } catch (error) {
       throw errorHandler('GetLogsError', {
         message: 'There was an error getting the logs',
@@ -160,11 +195,13 @@ export class LogService {
           Authorization: process.env.OABCS_CREDS
         },
       })
+      // Massaging received data
       let logs = JSON.parse(response.data.result.payload.replace(/\\"/gm, ""));
-      logs["category"] = "Processor";
-      logs["userCount"] = "1";
-      logs["deviceName"] = "Server";
-      logs["operatingSystem"] = "Linux";
+      logs.category = "Processor";
+      logs.userCount = "1";
+      logs.deviceName = "Server";
+      logs.operatingSystem = "Linux";
+      logs.dateTime = logs.dateTime.substring(0, logs.dateTime.indexOf("."));
       return logs;
     } catch (error) {
       throw errorHandler('GetLogsError', {
