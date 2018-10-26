@@ -11,7 +11,8 @@ const managementSchema = new Schema({
     softwareUpdateFee: { type: Number },
     otherFees: { type: Number },
     cdPackFee: { type: Number },
-    unitPrice: { type: Number }
+    unitPrice: { type: Number },
+    supportDate: { type: String }
 });
 
 export const management = model('management', managementSchema);

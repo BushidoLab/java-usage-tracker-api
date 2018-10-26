@@ -12,8 +12,8 @@ export class ManagementService {
     quantity,
     listFee,
     discount,
-    netFee,
     productSupportFee,
+    supportDate,
     softwareUpdateFee,
     otherFees,
     cdPackFee,
@@ -26,12 +26,13 @@ export class ManagementService {
         quantity,
         listFee,
         discount,
-        netFee,
         productSupportFee,
+        supportDate,
         softwareUpdateFee,
         otherFees,
         cdPackFee,
         unitPrice,
+        netFee: ((quantity * listFee) + productSupportFee + softwareUpdateFee + otherFees + cdPackFee) * (1 - discount/100)
       });
     } catch (error) {
       throw errorHandler('CreateManagementError', {

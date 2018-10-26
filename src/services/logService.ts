@@ -24,19 +24,6 @@ function parseLogs(value, arr) {
   return parseLogs(newStr, arr);
 }
 
-// Checks if logs are from the same host
-function repeatedLogs(firstLog, secondLog) {
-  for (let hostname in firstLog) {
-    if (firstLog[hostname] === secondLog[hostname]) {
-      if (firstLog.dateTime < secondLog.dateTime) {
-        return secondLog;
-      } else {
-        return firstLog;
-      }
-    }
-  }
-}
-
 export class LogService {
   // Query a company by name to return number of logs associated to it
   static async queryLogs() {
@@ -140,7 +127,6 @@ export class LogService {
       // Massaging received data
       // Receives response and eliminates all instances of \"
       const logs = response.data.result.payload.replace(/\\"/gm, "");
-      
       let usageLogs = parseLogs(logs, logArr);
       usageLogs.forEach(log => {
         log.IP = log.hostname.substring(log.hostname.indexOf("/") + 1);
@@ -158,13 +144,14 @@ export class LogService {
         log.operatingSystem = log.OS;
         delete log.OS;
       });
-
+      
       for (let i = 0; i < usageLogs.length; i++) {
         if (i+1 < usageLogs.length) {
-          usageLogs = repeatedLogs(usageLogs[i], usageLogs[i+1]);
+          if (usageLogs[i].hostname == usageLogs[i + 1].hostname) {
+            usageLogs.splice(i, 1);
+          }
         }
       }
-
       return usageLogs;
 
     } catch (error) {
@@ -183,52 +170,10 @@ export class LogService {
       method: "queryAllLogs",
       args: ["oracle"]
     };
-    const nupData = {
-      channel,
-      chaincode: NUPChaincode,
-      chaincodeVer,
-      method: "queryAllLogs",
-      args: ["oracle"]
-    };
-    const nupLogs = [];
     const processorLogs = [];
 
     try {
-      const response = await axios.post('https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query',
-      nupData, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: process.env.OABCS_CREDS
-        },
-      })
-      const logs = response.data.result.payload.replace(/\\"/gm, "");
-      
-      let usageLogs = parseLogs(logs, nupLogs);
-      usageLogs.forEach(log => {
-        log.IP = log.hostname.substring(log.hostname.indexOf("/") + 1);
-        log.deviceName = log.hostname.substring(0, log.hostname.indexOf("/"));
-        log.model = "Intel(R) Xeon(R) CPU E5-2699C v4 @ 2.20GHz";
-        log.cores = 4;
-        log.vendor = "GenuineIntel";
-        log.version = "1.8.0_181";
-        if (log.javaLocation.includes("jdk")) {
-          log.appName = "Java Development Kit";
-        } else if (log.javaLocation.includes("jre")) {
-          log.appName = "Java Runtime Environment"; }
-        log.dateTime = log.dateTime;
-        log.product = "Java SE Advanced Desktop";
-        log.category = "NUP";
-        log.userCount = 1;
-        log.operatingSystem = log.OS;
-        delete log.OS;
-      });
-
-      for (let i = 0; i < usageLogs.length; i++) {
-        if (i+1 < usageLogs.length) {
-          usageLogs = repeatedLogs(usageLogs[i], usageLogs[i+1]);
-        }
-      }
+      const usageLogs = await this.queryAllLogs();
       try {
         const response = await axios.post('https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query',
         procData, {
@@ -253,8 +198,22 @@ export class LogService {
           log.version = "1.8.0_181";
           log.appName = "Java Development Kit";
         })
-
-        procLogs.push(usageLogs);
+        usageLogs.forEach(log => {
+          log.version = log.javaVersion;
+          log.deviceName = log.hostname;
+          log.model = "Intel(R) Xeon(R) CPU E5-2699C v4 @ 2.20GHz";
+          log.cores = 4;
+          log.vendor = "GenuineIntel"
+          if (log.javaLocation.includes("jdk")) {
+            log.appName = "Java Development Kit";
+          } else if (log.javaLocation.includes("jre")) {
+            log.appName = "Java Runtime Environment"; 
+          }
+          log.product = "Java SE Advanced Desktop"
+          delete log.javaVersion;
+          delete log.hostname;
+          procLogs.push(log);
+        })
         return procLogs;
       } catch (error) {
         throw errorHandler('GetLogsError', {

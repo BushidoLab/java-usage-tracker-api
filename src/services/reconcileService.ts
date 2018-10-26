@@ -2,18 +2,14 @@ import { management } from '../db/models/Management';
 import { LogService } from './logService';
 
 function countDownTimer(supportDate) {
-  const countDownDate = new Date("January 25, 2019 15:37:25").getTime();
-  const distance = countDownDate - supportDate;
-
-  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
-  var result = `${days}d ${hours}h ${minutes}m`;
+  var strDate = new Date(supportDate);
+  // Adds a year to date passed as param
+  const expireDate = new Date(strDate).getTime() + 31540000000;
+  const distance = expireDate - Date.now();
   if (distance < 0) {
-    return "No support"
+    return "Expired"
   }
-  return result;
+  return new Date(expireDate).toString();
 }
 
 export class ReconcileService {
@@ -44,14 +40,15 @@ export class ReconcileService {
       })
       obj.quantity = form.quantity;
       if (form.productSupportFee > 0) {
-        obj.supported = countDownTimer(Date.now());
+        let date = countDownTimer(form.supportDate);
+        obj.supported = date.substring(0, date.indexOf(":") - 2)
       } else {
         obj.supported = "No support";
       }
       obj.inventory = logCount;
       obj.difference = obj.quantity - obj.inventory;
       if (obj.difference < 0) {
-        obj.amount = obj.difference * form.unitPrice;
+        obj.amount = -obj.difference * form.unitPrice;
       } else {
         obj.amount = 0;
       }
