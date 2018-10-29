@@ -137,7 +137,7 @@ export class LogService {
         } else if (log.javaLocation.includes("jre")) {
           log.appName = "Java Runtime Environment";
         }
-        log.dateTime = log.dateTime;
+        log.dateTime = new Date(log.dateTime).toDateString()
         log.product = "Java";
         log.category = "NUP";
         log.userCount = 1;
@@ -192,7 +192,7 @@ export class LogService {
           log.category = "Processor";
           log.operatingSystem = "Linux";
           log.deviceName = `${log.operatingSystem} server`
-          log.dateTime = log.dateTime.substring(0, log.dateTime.indexOf("."));
+          log.dateTime = new Date(log.dateTime).toDateString();
           log.IP = `192.168.1.30`;
           log.product = "Java SE Advanced";
           log.version = "1.8.0_181";

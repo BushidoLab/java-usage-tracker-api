@@ -48,9 +48,9 @@ export class ReconcileService {
       obj.inventory = logCount;
       obj.difference = obj.quantity - obj.inventory;
       if (obj.difference < 0) {
-        obj.amount = -obj.difference * form.unitPrice;
+        obj.amount = obj.difference * form.unitPrice;
       } else {
-        obj.amount = 0;
+        obj.amount = obj.difference * form.unitPrice;
       }
       reconcileArr.push(obj);
     })
