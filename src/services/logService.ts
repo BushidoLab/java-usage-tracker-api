@@ -1,6 +1,7 @@
 // const axios = require('axios');
 import axios from 'axios';
 import { errorHandler } from '../errors/errorHandler';
+import * as _ from 'lodash'
 require('dotenv').config();
 
 const channel = "default";
@@ -127,33 +128,49 @@ export class LogService {
       // Massaging received data
       // Receives response and eliminates all instances of \"
       const logs = response.data.result.payload.replace(/\\"/gm, "");
-      let usageLogs = parseLogs(logs, logArr);
+
+      const usageLogs = parseLogs(logs, logArr);
       usageLogs.forEach(log => {
         log.IP = log.hostname.substring(log.hostname.indexOf("/") + 1);
         log.hostname = log.hostname.substring(0, log.hostname.indexOf("/"));
-
         if (log.javaLocation.includes("jdk")) {
           log.appName = "Java Development Kit";
         } else if (log.javaLocation.includes("jre")) {
           log.appName = "Java Runtime Environment";
         }
-        log.dateTime = new Date(log.dateTime).toDateString()
+        log.dateTime = new Date(log.dateTime).toUTCString();
+        log.operatingSystem = log.OS;
+        delete log.OS;
+        log.version = log.javaVersion;
+        log.deviceName = log.hostname;
+        log.logs = [];
+        // Hardcoding fake data
         log.product = "Java";
         log.category = "NUP";
         log.userCount = 1;
-        log.operatingSystem = log.OS;
-        delete log.OS;
+        log.model = "N/A";
+        log.cores = "N/A";
+        log.vendor = "N/A"
+        log.product = "Java SE Advanced Desktop"
       });
-      
-      for (let i = 0; i < usageLogs.length; i++) {
-        if (i+1 < usageLogs.length) {
-          if (usageLogs[i].hostname == usageLogs[i + 1].hostname) {
+
+      const uniqueLogs = _.uniqBy(usageLogs, 'hostname');
+      const uniqueArr = [];
+      uniqueLogs.forEach(log => {
+        uniqueArr.push(log);
+      })
+
+      uniqueArr.forEach(log => {
+        for (let i = 0; i < usageLogs.length; i++) {
+          if (_.isEqual(log, usageLogs[i])) {
             usageLogs.splice(i, 1);
+          } else if (log.deviceName == usageLogs[i].deviceName) {
+            log.logs.push(usageLogs[i]);
           }
         }
-      }
-      return usageLogs;
+      })
 
+      return uniqueArr;
     } catch (error) {
       throw errorHandler('GetLogsError', {
         message: 'There was an error getting the logs',
@@ -199,19 +216,6 @@ export class LogService {
           log.appName = "Java Development Kit";
         })
         usageLogs.forEach(log => {
-          log.version = log.javaVersion;
-          log.deviceName = log.hostname;
-          log.model = "Intel(R) Xeon(R) CPU E5-2699C v4 @ 2.20GHz";
-          log.cores = 4;
-          log.vendor = "GenuineIntel"
-          if (log.javaLocation.includes("jdk")) {
-            log.appName = "Java Development Kit";
-          } else if (log.javaLocation.includes("jre")) {
-            log.appName = "Java Runtime Environment"; 
-          }
-          log.product = "Java SE Advanced Desktop"
-          delete log.javaVersion;
-          delete log.hostname;
           procLogs.push(log);
         })
         return procLogs;

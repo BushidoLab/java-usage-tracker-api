@@ -42,6 +42,27 @@ export class ManagementService {
     }
   }
 
+
+  static async uploadFile({ file }) {
+    try {
+      const { stream, filename, mimetype, encoding } = await file;
+      const bucket = management.create({ ...file })
+      // const uploadStream = bucket.openUploadStream(filename);
+      await new Promise((resolve, reject) => {
+        stream
+          // .pipe(uploadStream)
+          .on("error", reject)
+          .on("finish", resolve)
+      });
+      return { _id: filename, mimetype, encoding }
+    } catch(error) {
+      throw errorHandler('UploadFileError', {
+        message: 'There was an error uploading this file',
+        data: error.response.data.error
+      });
+    }
+  }
+
   static async deleteManagement({
     id
   }) {
