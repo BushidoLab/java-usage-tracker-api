@@ -19,7 +19,7 @@ export class ReconcileService {
     let reconcileArr = [];
 
     manageForms.forEach(form => {
-      form.license = form.license
+      form.license = form.license;
       // Creates an object fitting the reconciliation grid
       let obj = {
         productName: String(),
@@ -32,7 +32,7 @@ export class ReconcileService {
       };
       let logCount = 0;
       audit.forEach(log => {
-        if (form.license == log.product) {
+        if (form.license == log.product && form.category === log.licenseType) {
           logCount++;
         }
         obj.productName = form.license;

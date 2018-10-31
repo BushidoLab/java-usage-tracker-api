@@ -14,14 +14,12 @@ function parseLogs(value, arr) {
   const results = arr;
   const index = value.indexOf(",{");
   const newStr = value.substring(index + 1)
-  
   results.push(JSON.parse(value.substring(0, index)))
   
   if (newStr.indexOf(",{") === -1) {
     results.push(JSON.parse(value.substring(index + 1)))
     return results
   }
-
   return parseLogs(newStr, arr);
 }
 
@@ -128,8 +126,8 @@ export class LogService {
       // Massaging received data
       // Receives response and eliminates all instances of \"
       const logs = response.data.result.payload.replace(/\\"/gm, "");
-
       const usageLogs = parseLogs(logs, logArr);
+
       usageLogs.forEach(log => {
         log.IP = log.hostname.substring(log.hostname.indexOf("/") + 1);
         log.hostname = log.hostname.substring(0, log.hostname.indexOf("/"));
@@ -138,7 +136,7 @@ export class LogService {
         } else if (log.javaLocation.includes("jre")) {
           log.appName = "Java Runtime Environment";
         }
-        log.dateTime = new Date(log.dateTime).toUTCString();
+        log.dateTime = new Date(log.dateTime).toDateString();
         log.operatingSystem = log.OS;
         delete log.OS;
         log.version = log.javaVersion;
@@ -168,7 +166,12 @@ export class LogService {
             log.logs.push(usageLogs[i]);
           }
         }
-      })
+        if (log.logs.length === 0) {
+          log.uses = 1;
+        } else {
+          log.uses = log.logs.length + 1;
+        }
+      }) 
 
       return uniqueArr;
     } catch (error) {
