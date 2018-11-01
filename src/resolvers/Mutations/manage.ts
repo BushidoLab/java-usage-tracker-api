@@ -7,7 +7,4 @@ export const management = {
   async deleteManagement(_, args) {
     return ManagementService.deleteManagement({ ...args });
   },
-  async uploadFile(_, args) {
-    return ManagementService.uploadFile({ ...args });
-  }
 };
