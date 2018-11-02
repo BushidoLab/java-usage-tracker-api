@@ -1,5 +1,6 @@
 import { management } from '../db/models/Management';
 import { LogService } from './logService';
+import { MailerService } from './mailingService';
 
 function countDownTimer(supportDate) {
   var strDate = new Date(supportDate);
@@ -14,6 +15,7 @@ function countDownTimer(supportDate) {
 
 export class ReconcileService {
   static async getReconcile() {
+    // let userEmail = await MailerService.getEmail({ email })
     let audit = await LogService.queryAllProcLogs();
     let manageForms:Array<any> = await management.find();
     let reconcileArr = [];
@@ -39,12 +41,14 @@ export class ReconcileService {
         obj.licenseType = form.licenseType;
       })
       obj.quantity = form.quantity;
+
       if (form.productSupportFee > 0) {
         let date = countDownTimer(form.supportDate);
         obj.supported = date.substring(0, date.indexOf(":") - 2)
       } else {
         obj.supported = "No support";
       }
+
       obj.inventory = logCount;
       obj.difference = obj.quantity - obj.inventory;
       if (obj.difference < 0) {

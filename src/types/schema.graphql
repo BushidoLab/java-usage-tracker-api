@@ -12,6 +12,7 @@ type Query {
   getProcLogCount: JSON!
   getReconcile: JSON!
   uploads: [File]
+  getEmail(email: String!): User!
 }
 
 type Mutation {
