@@ -1,14 +1,15 @@
 import { errorHandler } from "../errors/errorHandler";
 import { User } from "../db/models/User";
-import { management } from '../db/models/Management';
 const nodemailer = require('nodemailer');
 // require('dotenv').config();
+
 let sentEmail;
 let productsArr = [];
 
+
 export class MailerService {
-  static async sendMail(email) {
-    // let manageForms:Array<any> = await management.find();
+  static async sendMail(manageForm) {
+    this.checkSupport(manageForm);
 
     let transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -20,14 +21,13 @@ export class MailerService {
     
     const mailOptions = {
       from: 'veratrustinfo@gmail.com',
-      to: email,
+      to: manageForm.user,
       subject: 'Your support period expires in 7 days',
       html: `
       <p>Your support for ${productsArr} is about to end</p>
       `
     }
 
-    this.checkSupport();
     if (productsArr.length > 0) {
       if (!sentEmail) {
         transporter.sendMail(mailOptions, (err, info) => {
@@ -35,16 +35,15 @@ export class MailerService {
           console.log(err)
           else 
           console.log(info);
-          sentEmail = true;
+          sentEmail = true; // Set email to false when cronjob runs
         });
       }
     }
   }
 
-  static async getEmail({ email }) {
+  static async getEmail(manageForm) {
     try {
-      const userEmail = await User.findOne({ email });
-      this.sendMail(email); // remove after testing
+      const userEmail = await User.findOne({ email: manageForm.user });
       return userEmail;
     } catch (error) {
       throw errorHandler('CreateEmailError', {
@@ -54,16 +53,13 @@ export class MailerService {
     }
   }
 
-  static async checkSupport() {
-    let manageForms:Array<any> = await management.find();
-    manageForms.forEach(form => {
-      if (form.productSupportFee > 0) {
-        let expireDate = new Date(form.supportDate).getTime() + 31540000000
-        if (expireDate - Date.now() < 604800000) {
-          productsArr.push(form.license);
-        }
+  static async checkSupport(form) {
+    if (form.productSupportFee > 0) {
+      let expireDate = new Date(form.supportDate).getTime() + 31540000000
+      if (expireDate - Date.now() < 604800000 && expireDate - Date.now() > 0) {
+        productsArr.push(form.license);
       }
-    })
+    }
     return productsArr;
   }
 }

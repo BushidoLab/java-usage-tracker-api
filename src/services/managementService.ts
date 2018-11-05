@@ -1,9 +1,5 @@
-import {
-  management
-} from '../db/models/Management';
-import {
-  errorHandler
-} from '../errors/errorHandler';
+import { management } from '../db/models/Management';
+import { errorHandler } from '../errors/errorHandler';
 
 export class ManagementService {
   static async manage({
@@ -18,6 +14,7 @@ export class ManagementService {
     otherFees,
     cdPackFee,
     unitPrice,
+    user,
   }) {
     try {
       return management.create({
@@ -32,6 +29,7 @@ export class ManagementService {
         otherFees,
         cdPackFee,
         unitPrice,
+        user,
         netFee: ((quantity * listFee) + productSupportFee + softwareUpdateFee + otherFees + cdPackFee) * (1 - discount/100)
       });
     } catch (error) {

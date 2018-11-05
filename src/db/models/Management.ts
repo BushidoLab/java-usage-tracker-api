@@ -12,7 +12,8 @@ const managementSchema = new Schema({
     otherFees: { type: Number },
     cdPackFee: { type: Number },
     unitPrice: { type: Number },
-    supportDate: { type: String }
+    supportDate: { type: String },
+    user: { type: String }
 });
 
 export const management = model('management', managementSchema);

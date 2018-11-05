@@ -1,14 +1,14 @@
 import { management } from '../db/models/Management';
 import { LogService } from './logService';
-import { MailerService } from './mailingService';
 
 function countDownTimer(supportDate) {
   var strDate = new Date(supportDate);
+
   // Adds a year to date passed as param
   const expireDate = new Date(strDate).getTime() + 31540000000;
   const distance = expireDate - Date.now();
   if (distance < 0) {
-    return "Expired"
+    return "Expired";
   }
   return new Date(expireDate).toString();
 }
@@ -22,6 +22,7 @@ export class ReconcileService {
 
     manageForms.forEach(form => {
       form.license = form.license;
+
       // Creates an object fitting the reconciliation grid
       let obj = {
         productName: String(),
@@ -34,7 +35,7 @@ export class ReconcileService {
       };
       let logCount = 0;
       audit.forEach(log => {
-        if (form.license == log.product && form.category === log.licenseType) {
+        if (form.license === log.product && form.licenseType === log.category) {
           logCount++;
         }
         obj.productName = form.license;
@@ -44,7 +45,11 @@ export class ReconcileService {
 
       if (form.productSupportFee > 0) {
         let date = countDownTimer(form.supportDate);
-        obj.supported = date.substring(0, date.indexOf(":") - 2)
+        if (date.includes(":")) {
+          obj.supported = date.substring(0, date.indexOf(":") - 2)
+        } else {
+          obj.supported = date;
+        }
       } else {
         obj.supported = "No support";
       }
