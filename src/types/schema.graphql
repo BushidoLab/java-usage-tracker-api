@@ -1,7 +1,18 @@
 scalar JSON
+scalar Upload
 
 type Query {
   fetchUsers: JSON!
+  getManagement: JSON!
+  getPrice(name: String!): Price!
+  getLog(args: [String!]): JSON!
+  getAllLogs: JSON!
+  getAllProcLogs: JSON!
+  getLogCount: JSON!
+  getProcLogCount: JSON!
+  getReconcile: JSON!
+  uploads: [File]
+  getEmail(email: String!): User!
 }
 
 type Mutation {
@@ -10,6 +21,10 @@ type Mutation {
     changePassword(email: String!, id: ID, newPassword: String!): User
     forgotPassword(email: String!): JSON!
     updateUserRole(userId: String!, role: String!): JSON!
+    manage(license: String!, licenseType: String!, quantity: Int!, listFee: Float!, discount: Float, supportDate: String, productSupportFee: Float, softwareUpdateFee: Float, otherFees: Float, cdPackFee: Float, unitPrice: Float, netFee: Float, user: String): Management
+    deleteManagement(id: String): JSON!
+    singleUpload(file: Upload!): File!
+    multipleUpload(file: [Upload!]!): [File!]!
 }
 
 type AuthPayload {
@@ -17,11 +32,52 @@ type AuthPayload {
   user: User
 }
 
+type File {
+  id: ID!
+  path: String!
+  filename: String!
+  mimetype: String!
+}
+
 type User {
-    firstName: String
-    lastName: String
-    email: String
-    password: String
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+}
+
+type Reconcile {
+  productName: String
+  licenseType: String
+  quantity: String
+  inventory: String
+  supported: String
+  difference: String
+  amount: String
+}
+
+type Management {
+  license: String!
+  licenseType: String!
+  quantity: Float!
+  listFee: Float!
+  discount: Float
+  netFee: Float
+  productSupportFee: Float
+  softwareUpdateFee: Float
+  otherFees: Float
+  cdPackFee: Float
+  unitPrice: Float
+  supportDate: String
+  user: String
+}
+
+type Price {
+  name: String!
+  NUP: String
+  NUPSupport: String
+  Processor: String
+  ProcessorSupport: String
 }
 
 enum Role {
