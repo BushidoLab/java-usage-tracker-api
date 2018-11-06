@@ -5,26 +5,24 @@ type Query {
   fetchUsers: JSON!
   getManagement: JSON!
   getPrice(name: String!): Price!
-  getLog(args: [String!]): JSON!
   getAllLogs: JSON!
   getAllProcLogs: JSON!
-  getLogCount: JSON!
-  getProcLogCount: JSON!
+  getAllNUPLogs: JSON!
   getReconcile: JSON!
   uploads: [File]
   getEmail(email: String!): User!
 }
 
 type Mutation {
-    signUp(email: String!, password: String!, firstName: String!, lastName: String!): AuthPayload!
-    login(email: String!, password: String!): AuthPayload!
-    changePassword(email: String!, id: ID, newPassword: String!): User
-    forgotPassword(email: String!): JSON!
-    updateUserRole(userId: String!, role: String!): JSON!
-    manage(license: String!, licenseType: String!, quantity: Int!, listFee: Float!, discount: Float, supportDate: String, productSupportFee: Float, softwareUpdateFee: Float, otherFees: Float, cdPackFee: Float, unitPrice: Float, netFee: Float, user: String): Management
-    deleteManagement(id: String): JSON!
-    singleUpload(file: Upload!): File!
-    multipleUpload(file: [Upload!]!): [File!]!
+  signUp(email: String!, password: String!, firstName: String!, lastName: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  changePassword(email: String!, id: ID, newPassword: String!): User
+  forgotPassword(email: String!): JSON!
+  updateUserRole(userId: String!, role: String!): JSON!
+  manage(license: String!, licenseType: String!, quantity: Int!, listFee: Float!, discount: Float, supportDate: String, productSupportFee: Float, softwareUpdateFee: Float, otherFees: Float, cdPackFee: Float, unitPrice: Float, netFee: Float, user: String): Management
+  deleteManagement(id: String): JSON!
+  singleUpload(file: Upload!): File!
+  multipleUpload(file: [Upload!]!): [File!]!
 }
 
 type AuthPayload {

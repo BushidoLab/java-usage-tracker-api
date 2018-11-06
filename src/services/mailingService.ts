@@ -24,7 +24,10 @@ export class MailerService {
       to: manageForm.user,
       subject: 'Your support period expires in 7 days',
       html: `
+      <img src="../assets/veratrust.png"></img>
       <p>Your support for ${productsArr} is about to end</p>
+      <br>
+      <p>Please contact your service administrator to extend your support</p>
       `
     }
 

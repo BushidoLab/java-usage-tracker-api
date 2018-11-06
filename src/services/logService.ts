@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const channel = "default";
 const NUPChaincode = "NUPChaincode";
-const ProcChaincode = "ProcessorChaincode";
+const ProcChaincode = "processor-cc";
 const chaincodeVer = "1.0";
 
 // Function parses through JUT logs stored on blockchain and returns an array of objects
@@ -24,87 +24,7 @@ function parseLogs(value, arr) {
 }
 
 export class LogService {
-  // Query a company by name to return number of logs associated to it
-  static async queryLogs() {
-    const data = {
-      channel,
-      chaincode: NUPChaincode,
-      chaincodeVer,
-      method: "query",
-      args: ["oracle"]
-    };
-    try {
-      const response = await axios.post('https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query',
-      data, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: process.env.OABCS_CREDS
-        },
-      })
-      return response.data.result.payload; 
-    } catch (error) {
-      throw errorHandler('GetLogsError', {
-        message: 'There was an error getting the  logs',
-        data: error.response.error.data,
-      })
-    }
-  }
-
-  static async queryProcLogs() {
-    const data = {
-      channel,
-      chaincode: ProcChaincode,
-      chaincodeVer,
-      method: "query",
-      args: ["oracle"]
-    };
-    try {
-      const response = await axios.post('https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query',
-      data, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: process.env.OABCS_CREDS
-        },
-      })
-      return response.data.result.payload; 
-    } catch (error) {
-      throw errorHandler('GetLogsError', {
-        message: 'There was an error getting the  logs',
-        data: error.response.error.data,
-      })
-    }
-  }
-
-  static async queryLog({args}) {
-    const data = {
-      channel,
-      chaincode: NUPChaincode,
-      chaincodeVer,
-      method: "queryLog",
-      args
-    };
-
-    try {
-      const response = await axios.post('https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query',
-      data, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: process.env.OABCS_CREDS
-        },
-      })
-      return response.data.result.payload; 
-    } catch (error) {
-      throw errorHandler('GetLogsError', {
-        message: 'There was an error getting the  logs',
-        data: error.response.error.data,
-      })
-    }
-  }
-
-  static async queryAllLogs() {
+  static async queryAllNUPLogs() {
     const data = {
       channel,
       chaincode: NUPChaincode,
@@ -142,14 +62,14 @@ export class LogService {
         log.version = log.javaVersion;
         log.deviceName = log.hostname;
         log.logs = [];
-        // Hardcoding fake data
-        log.product = "Java";
+        // Hardcoding missing data
+        log.product = "Java SE Advanced Desktop";
         log.category = "NUP";
         log.userCount = 1;
         log.model = "N/A";
         log.cores = "N/A";
-        log.vendor = "N/A"
-        log.product = "Java SE Advanced Desktop"
+        log.vendor = "N/A";
+        log.virtualMachine = "N/A";
       });
 
       const uniqueLogs = _.uniqBy(usageLogs, 'hostname');
@@ -182,6 +102,8 @@ export class LogService {
     }
   }
 
+
+
   static async queryAllProcLogs() {
     const procData = {
       channel,
@@ -191,43 +113,50 @@ export class LogService {
       args: ["oracle"]
     };
     const processorLogs = [];
-
     try {
-      const usageLogs = await this.queryAllLogs();
-      try {
-        const response = await axios.post('https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query',
-        procData, {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: process.env.OABCS_CREDS
-          },
-        })
-        // Massaging received data
-        const logs = response.data.result.payload.replace(/\\"/gm, "");
-        let procLogs = parseLogs(logs, processorLogs);
-        
-        procLogs.forEach(log => {
-          log.userCount = "1";
-          log.category = "Processor";
-          log.operatingSystem = "Linux";
-          log.deviceName = `${log.operatingSystem} server`
-          log.dateTime = new Date(log.dateTime).toDateString();
-          log.IP = `192.168.1.30`;
-          log.product = "Java SE Advanced";
-          log.version = "1.8.0_181";
-          log.appName = "Java Development Kit";
-        })
-        usageLogs.forEach(log => {
-          procLogs.push(log);
-        })
-        return procLogs;
-      } catch (error) {
-        throw errorHandler('GetLogsError', {
-          message: 'There was an error getting the logs',
-          data: error.response.error.data,
-        })
-      }
+      const response = await axios.post('https://8BECD2B5F48C47EEB7375AB654A8D7A5.blockchain.ocp.oraclecloud.com:443/restproxy1/bcsgw/rest/v1/transaction/query',
+      procData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: process.env.OABCS_CREDS
+        },
+      })
+      // Massaging received data
+      let logs = response.data.result.payload.replace(/\\"/gm, "");
+      let procLogs = parseLogs(logs, processorLogs);
+      
+      procLogs.forEach(log => {
+        log.deviceName = `${log.OS} server`
+        log.dateTime = new Date(log.dateTime).toDateString();
+        log.product = "Java SE Advanced";
+        log.version = "1.8.0_181";
+        log.appName = "Java Development Kit";
+        if (log.OS === "Windows_NT") {
+          log.OS = "Windows";
+        } else if (log.OS === "Darwin") {
+          log.OS = "macOS";
+        }
+        log.operatingSystem = log.OS;
+        log.virtualMachine = log.virtualization;
+      })
+      return procLogs;
+    } catch (error) {
+      throw errorHandler('GetLogsError', {
+        message: 'There was an error getting the logs',
+        data: error.response.error.data,
+      })
+    }
+  }
+
+  static async queryAllLogs() {
+    try {
+      const usageLogs = await this.queryAllNUPLogs();
+      let procLogs = await this.queryAllProcLogs();
+      usageLogs.forEach(log => {
+        procLogs.push(log)
+      })
+      return procLogs;
     } catch (error) {
       throw errorHandler('GetLogsError', {
         message: 'There was an error getting the logs',

@@ -16,7 +16,7 @@ function countDownTimer(supportDate) {
 export class ReconcileService {
   static async getReconcile() {
     // let userEmail = await MailerService.getEmail({ email })
-    let audit = await LogService.queryAllProcLogs();
+    let audit = await LogService.queryAllLogs();
     let manageForms:Array<any> = await management.find();
     let reconcileArr = [];
 
