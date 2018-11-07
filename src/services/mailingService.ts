@@ -1,30 +1,27 @@
 import { errorHandler } from "../errors/errorHandler";
 import { User } from "../db/models/User";
 const nodemailer = require('nodemailer');
-// require('dotenv').config();
+require('dotenv').config()
 
-let sentEmail;
+let sentEmail;  
 let productsArr = [];
-
 
 export class MailerService {
   static async sendMail(manageForm) {
     this.checkSupport(manageForm);
-
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'veratrustinfo@gmail.com', // Change to env vars
-        pass: 'bushidolab2018'
+        user: process.env.MAILER_USER,
+        pass: process.env.MAILER_PASS
       }
     });
     
     const mailOptions = {
-      from: 'veratrustinfo@gmail.com',
+      from: process.env.MAILER_USER,
       to: manageForm.user,
       subject: 'Your support period expires in 7 days',
       html: `
-      <img src="../assets/veratrust.png"></img>
       <p>Your support for ${productsArr} is about to end</p>
       <br>
       <p>Please contact your service administrator to extend your support</p>

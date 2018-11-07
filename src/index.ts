@@ -8,7 +8,7 @@ import { management } from './db/models/Management';
 
 require('dotenv').config()
 
-const start = async () => {
+const start = async () => {  
   // Create a mongodb client
   mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
   const db = mongoose.connection;

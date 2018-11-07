@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const channel = "default";
 const NUPChaincode = "NUPChaincode";
-const ProcChaincode = "processor-cc";
+const ProcChaincode = "Proc";
 const chaincodeVer = "1.0";
 
 // Function parses through JUT logs stored on blockchain and returns an array of objects
@@ -70,9 +70,10 @@ export class LogService {
         log.cores = "N/A";
         log.vendor = "N/A";
         log.virtualMachine = "N/A";
+        log.subVendor = "N/A";
       });
 
-      const uniqueLogs = _.uniqBy(usageLogs, 'hostname');
+      const uniqueLogs = _.uniqBy(usageLogs.reverse(), 'hostname');
       const uniqueArr = [];
       uniqueLogs.forEach(log => {
         uniqueArr.push(log);
@@ -127,11 +128,12 @@ export class LogService {
       let procLogs = parseLogs(logs, processorLogs);
       
       procLogs.forEach(log => {
-        log.deviceName = `${log.OS} server`
         log.dateTime = new Date(log.dateTime).toDateString();
         log.product = "Java SE Advanced";
         log.version = "1.8.0_181";
         log.appName = "Java Development Kit";
+        log.userCount = 1;
+        log.category = "Processor";
         if (log.OS === "Windows_NT") {
           log.OS = "Windows";
         } else if (log.OS === "Darwin") {

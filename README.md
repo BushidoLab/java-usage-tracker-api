@@ -2,6 +2,7 @@
 
 ## Introduction
 This project contains the API used to fetch information from our front end [VeraTrust app](https://github.com/BushidoLab/java-usage-tracker-app)
+The discovery tools as well as the post requests and chaincode can be found in this repository [Java Usage Tracker](https://github.com/BushidoLab/java-usage-tracker)
 
 The main tecnology used is [GraphQL](https://graphql.org/) which is used to connect to both our [MongoDB](https://www.mongodb.com/) used to store form data and user info as well as our Oracle Autonomous Blockchain Cloud Service provided in the [Oracle cloud](https://cloud.oracle.com/home)
 
