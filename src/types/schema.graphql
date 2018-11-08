@@ -2,7 +2,7 @@ scalar JSON
 scalar Upload
 
 type Query {
-  fetchUsers: JSON!
+  userInfo(email: String!): JSON!
   getManagement: JSON!
   getPrice(name: String!): Price!
   getAllLogs: JSON!

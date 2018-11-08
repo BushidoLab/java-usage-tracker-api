@@ -38,4 +38,14 @@ export class AuthService {
         }
     }
 
+    static async userInfo({ email }) {
+        try {
+            return await User.findOne({ email });
+        } catch (error) {
+            throw errorHandler('UserFetchError', {
+                message: 'There was an error finding a user by this email',
+                data: error.response.data.error
+            })
+        }
+    }
 }
