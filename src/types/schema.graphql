@@ -22,7 +22,6 @@ type Mutation {
   manage(license: String!, licenseType: String!, quantity: Int!, listFee: Float!, discount: Float, supportDate: String, productSupportFee: Float, softwareUpdateFee: Float, otherFees: Float, cdPackFee: Float, unitPrice: Float, netFee: Float, user: String): Management
   deleteManagement(id: String): JSON!
   singleUpload(file: Upload!): File!
-  multipleUpload(file: [Upload!]!): [File!]!
 }
 
 type AuthPayload {
@@ -35,6 +34,7 @@ type File {
   path: String!
   filename: String!
   mimetype: String!
+  encoding: String!
 }
 
 type User {
