@@ -3,16 +3,16 @@ import * as jwt from 'jsonwebtoken';
 
 //Authentication for express requests
 export const expressPermissions = (req, res, next) => {
-  if (!req.header('Authorization'))
-    return res.status(401).send({
-      message: 'Please make sure your request has an Authorization header.'
-    });
-  const Authorization = req.header('Authorization');
-  if (Authorization) {
-    const token = Authorization.replace('Bearer', '');
-    jwt.verify(token, process.env.TOKEN_SECRET);
+  // if (!req.header('Authorization'))
+  //   return res.status(401).send({
+  //     message: 'Please make sure your request has an Authorization header.'
+  //   });
+  // const Authorization = req.header('Authorization');
+  // if (Authorization) {
+  //   const token = Authorization.replace('Bearer', '');
+  //   jwt.verify(token, process.env.TOKEN_SECRET);
     next();
-  }
+  // }
 };
 
 //Authentication for graphql requests

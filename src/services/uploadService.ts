@@ -46,7 +46,7 @@ export class UploadService {
 
   static processUpload = async upload => {
     try {
-      console.log(upload);
+      // console.log(upload);
       const { stream, fileName, mimeType, encoding } = await upload
       const { id, path } = await UploadService.storeUpload({ stream, fileName })
       return UploadService.recordFile({ id, fileName, mimeType, encoding, path })

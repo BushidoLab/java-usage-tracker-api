@@ -8,7 +8,6 @@ const router = Router();
 const upload = multer({ dest: 'tmp/csv' });
 
 router.post('/', upload.single('file'), (req, res) => {
-  console.log(req);
   const fileRows = [];
   csv
     .fromPath(req.file.path)

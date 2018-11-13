@@ -43,7 +43,7 @@ const start = async () => {
   const graphQLServer = new GraphQLServer({
     typeDefs: './src/types/schema.graphql',
     resolvers,
-    middlewares: [permissions],
+    // middlewares: [permissions],
     context: req => ({
       ...req,
       db

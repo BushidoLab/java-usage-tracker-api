@@ -30,7 +30,7 @@ export class ManagementService {
         cdPackFee,
         unitPrice,
         user,
-        netFee: ((quantity * listFee) + productSupportFee + softwareUpdateFee + otherFees + cdPackFee) * (1 - discount/100)
+        netFee: (Number(listFee) + Number(productSupportFee) + Number(softwareUpdateFee) + Number(otherFees) + Number(cdPackFee)) * (1 - Number(discount)/100)
       });
     } catch (error) {
       throw errorHandler('CreateManagementError', {

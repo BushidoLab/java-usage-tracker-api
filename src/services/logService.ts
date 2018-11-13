@@ -62,6 +62,7 @@ export class LogService {
         log.version = log.javaVersion;
         log.deviceName = log.hostname;
         log.logs = [];
+        log.version = log.version.trim();
         // Hardcoding missing data
         log.product = "Java SE Advanced Desktop";
         log.category = "NUP";
