@@ -71,7 +71,6 @@ export class LogService {
         log.cores = "N/A";
         log.vendor = "N/A";
         log.virtualMachine = "N/A";
-        log.subVendor = "N/A";
       });
 
       const uniqueLogs = _.uniqBy(usageLogs.reverse(), 'hostname');
