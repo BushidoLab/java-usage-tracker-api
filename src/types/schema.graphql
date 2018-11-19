@@ -19,7 +19,7 @@ type Mutation {
   changePassword(email: String!, id: ID, newPassword: String!): User
   forgotPassword(email: String!): JSON!
   updateUserRole(userId: String!, role: String!): JSON!
-  manage(license: String!, licenseType: String!, quantity: Int!, listFee: Float!, discount: Float, supportDate: String, productSupportFee: Float, softwareUpdateFee: Float, otherFees: Float, cdPackFee: Float, unitPrice: Float, netFee: Float, user: String): Management
+  manage(license: String!, vendor: String, licenseType: String!, version: String!, quantity: Int!, listFee: Float!, discount: Float, supportDate: String, productSupportFee: Float, softwareUpdateFee: Float, otherFees: Float, cdPackFee: Float, unitPrice: Float, netFee: Float, csi: Float, vendorNumber: String, user: String): Management
   deleteManagement(id: String): JSON!
   singleUpload(file: Upload!): File!
 }
@@ -56,7 +56,9 @@ type Reconcile {
 
 type Management {
   license: String!
+  vendor: String
   licenseType: String!
+  version: String!
   quantity: Float!
   listFee: Float!
   discount: Float
@@ -67,6 +69,8 @@ type Management {
   cdPackFee: Float
   unitPrice: Float
   supportDate: String
+  csi: Float
+  vendorNumber: String
   user: String
 }
 

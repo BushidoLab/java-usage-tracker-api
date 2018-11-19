@@ -4,7 +4,9 @@ import { errorHandler } from '../errors/errorHandler';
 export class ManagementService {
   static async manage({
     license,
+    vendor,
     licenseType,
+    version,
     quantity,
     listFee,
     discount,
@@ -14,12 +16,16 @@ export class ManagementService {
     otherFees,
     cdPackFee,
     unitPrice,
+    csi,
+    vendorNumber,
     user,
   }) {
     try {
       return management.create({
         license,
+        vendor,
         licenseType,
+        version,
         quantity,
         listFee,
         discount,
@@ -30,6 +36,8 @@ export class ManagementService {
         cdPackFee,
         unitPrice,
         user,
+        csi,
+        vendorNumber,
         netFee: (Number(listFee) + Number(productSupportFee) + Number(softwareUpdateFee) + Number(otherFees) + Number(cdPackFee)) * (1 - Number(discount)/100)
       });
     } catch (error) {

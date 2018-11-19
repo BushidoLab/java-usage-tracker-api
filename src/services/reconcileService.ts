@@ -22,24 +22,29 @@ export class ReconcileService {
 
     manageForms.forEach(form => {
       form.license = form.license;
-
+      
       // Creates an object fitting the reconciliation grid
       let obj = {
         productName: String(),
         licenseType: String(),
+        version: String(),
         quantity: Number(),
         supported: String(),
         inventory: Number(),
         difference: Number(),
         amount: Number(),
       };
+
       let logCount = 0;
       audit.forEach(log => {
-        if (form.license === log.product && form.licenseType === log.category) {
-          logCount++;
+        // Counts the object in managements that matches a logs product name, license type and version number
+        if (form.license === log.product && form.licenseType === log.category && form.version === log.version) {
+            logCount++;
+            obj.productName = form.license;
+            obj.licenseType = form.licenseType;
+            obj.version = log.version;
         }
-        obj.productName = form.license;
-        obj.licenseType = form.licenseType;
+          
       })
       obj.quantity = form.quantity;
 
@@ -57,9 +62,9 @@ export class ReconcileService {
       obj.inventory = logCount;
       obj.difference = obj.quantity - obj.inventory;
       if (obj.difference < 0) {
-        obj.amount = obj.difference * form.unitPrice;
+        obj.amount = -obj.difference * form.unitPrice;
       } else {
-        obj.amount = obj.difference * form.unitPrice;
+        obj.amount = 0;
       }
       reconcileArr.push(obj);
     })

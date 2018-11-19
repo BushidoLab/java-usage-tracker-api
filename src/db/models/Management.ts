@@ -2,7 +2,9 @@ import { model, Schema } from 'mongoose';
 
 const managementSchema = new Schema({
     license: { type: String, required: true },
+    vendor: { type: String, required: true},
     licenseType: { type: String, require: true },
+    version: { type: String, require: true },
     quantity: { type: Number, min: [1, `License quantity must be over one`], required: true },
     listFee: { type: Number, min: 1, required: true },
     discount: { type: Number },
@@ -12,6 +14,8 @@ const managementSchema = new Schema({
     otherFees: { type: Number },
     cdPackFee: { type: Number },
     unitPrice: { type: Number },
+    csi: { type: Number },
+    vendorNumber: { type: String },
     supportDate: { type: String },
     user: { type: String }
 });

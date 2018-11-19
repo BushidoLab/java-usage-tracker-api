@@ -26,16 +26,20 @@ const createManagementFromCsv = ({ fileRows }) => {
     index !== 0 &&
       ManagementService.manage({
         license: row[2],
-        licenseType: row[3],
-        quantity: row[4],
-        listFee: row[5],
-        discount: row[6],
-        productSupportFee: row[7],
+        vendor: row[3],
+        licenseType: row[4],
+        version: row[5],
+        quantity: row[6],
+        listFee: row[7],
+        discount: row[8],
+        productSupportFee: row[9],
         supportDate: null,
-        softwareUpdateFee: row[8],
-        otherFees: row[9],
-        cdPackFee: row[10],
+        softwareUpdateFee: row[10],
+        otherFees: row[11],
+        cdPackFee: row[12],
         unitPrice: null,
+        csi: row[13],
+        vendorNumber: row[14],
         user: null
       });
   });
