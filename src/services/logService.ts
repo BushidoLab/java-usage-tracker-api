@@ -71,6 +71,11 @@ export class LogService {
         log.cores = "N/A";
         log.vendor = "N/A";
         log.virtualMachine = "N/A";
+        log.MAC = "N/A";
+        log.subVendor = "N/A";
+        log.serverName = "N/A";
+        log.standbyServer = "N/A";
+        log.optionsUsed = "N/A";
       });
 
       const uniqueLogs = _.uniqBy(usageLogs.reverse(), 'hostname');
@@ -129,18 +134,24 @@ export class LogService {
       
       procLogs.forEach(log => {
         log.dateTime = new Date(log.dateTime).toDateString();
-        log.product = "Java SE Advanced";
-        log.version = "1.8.0_181";
-        log.appName = "Java Development Kit";
-        log.userCount = 1;
-        log.category = "Processor";
         if (log.OS === "Windows_NT") {
           log.OS = "Windows";
         } else if (log.OS === "Darwin") {
           log.OS = "macOS";
         }
+        // Fitting log keys to fit with grid fields
         log.operatingSystem = log.OS;
         log.virtualMachine = log.virtualization;
+
+        // Hardcoding missing data
+        log.product = "Java SE Advanced";
+        log.version = "1.8.0_181";
+        log.appName = "Java Development Kit";
+        log.userCount = 1;
+        log.category = "Processor";
+        log.serverName = "N/A";
+        log.standbyServer = "N/A";
+        log.optionsUsed = "N/A";
       })
       return procLogs;
     } catch (error) {
