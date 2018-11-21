@@ -32,7 +32,7 @@ const start = async () => {
   });
   task.start();
 
-  const port = 4000;
+  const port = process.env.PORT || 4000;
   const options = {
     tracing: true,
     cacheControl: true,
