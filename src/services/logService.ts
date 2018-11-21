@@ -153,7 +153,6 @@ export class LogService {
         log.standbyServer = "N/A";
         log.optionsUsed = "N/A";
       })
-
       return procLogs;
     } catch (error) {
       throw errorHandler('GetLogsError', {
@@ -169,27 +168,6 @@ export class LogService {
       let procLogs = await this.queryAllProcLogs();
       usageLogs.forEach(log => {
         procLogs.push(log)
-      })
-      procLogs.push(
-        {
-        product: "Oracle Database Enterprise Edition",
-        deviceName: "DBASE1",
-        IP: "10.1.1.15",
-        MAC: "10:7B:44:18:02:78",
-        subVendor: "Proliant",
-        serverName: "SRVRDB01",
-        version: "11g",
-        virtualMachine: "LPAR",
-        operatingSystem: "AIX 6",
-        category: "Processor",
-        standbyServer: "oracle_db_12345",
-        model: "IBM P780 P7",
-        cores: "6",
-        appName: "Enterprise",
-        userCount: "10",
-        dateTime: "Fri Oct 26 2018",
-        optionsUsed: "Advanced Security",
-        vendor: "IBM"
       })
       return procLogs;
     } catch (error) {
