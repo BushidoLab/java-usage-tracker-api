@@ -39,7 +39,7 @@ const createManagementFromCsv = ({ fileRows }) => {
         softwareUpdateFee: row[13],
         otherFees: row[14],
         cdPackFee: row[15],
-        unitPrice: null,
+        unitPrice: row[16],
         user: null
       });
   });
