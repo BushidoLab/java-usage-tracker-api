@@ -1,0 +1,10 @@
+{
+    "runtime":{
+      "majorVersion":"6"
+    },
+    "command": "npm start",
+    "release": {
+      "version": "1.0"
+    },
+    "notes": "Java Usage Tracker application"
+  }
