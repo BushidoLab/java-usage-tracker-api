@@ -1,5 +1,15 @@
+# Editor configuration
 .vscode/
+
+# Dependencies
 node_modules/
 package-lock.json
+
+# Environment variables
 .env
+
+# Compiled typescript
 dist/
+
+# Some tests
+tmp/
