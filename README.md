@@ -1,6 +1,7 @@
-# Java Usage Tracker API
+# Java Usage Tracker API 
 
 ## Introduction
+
 This project contains the API used to fetch information from our front end [VeraTrust app](https://github.com/BushidoLab/java-usage-tracker-app)
 The discovery tools as well as the post requests and chaincode can be found in this repository [Java Usage Tracker](https://github.com/BushidoLab/java-usage-tracker)
 
