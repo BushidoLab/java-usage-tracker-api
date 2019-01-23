@@ -67,14 +67,12 @@
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.13.0",
     "ts-node": "^7.0.1",
-    "ws": "^6.1.2"
-  },
-  "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^7.2.8",
     "@types/mongoose": "^5.2.19",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "typescript": "^2.9.2"
+    "typescript": "^2.9.2",
+    "ws": "^6.1.2"
   },
   "resolutions": {
     "**/event-stream": "^4.0.1"
