@@ -54,7 +54,7 @@ const start = async () => {
   graphQLServer.express.use('/upload', router);
 
   graphQLServer.start(options, _ =>
-    console.log('Server is running on localhost:4000')
+    console.log('Server is running on port:', port)
   );
 };
 start();
